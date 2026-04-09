@@ -22,9 +22,16 @@ for a in range(6):
         rect = pygame.Rect(round(float(screen_width / 10) * 1.25 * a + 5 * a + (screen_width / 20) * 2), round((float(screen_height / 20)) * (1.2 * b) + (screen_height / 20) * 4),  (round(float((screen_width / 10) * 1.25))), round(float(screen_height / 20)))
         rects.append(rect)
 
-numbers = [[7,8,9],[4,5,6],[1,2,3]]
-text = ""
+for g in range(5):
+    for f in range(4):
+        rect = pygame.Rect(round(float(screen_width / 10) * 1.5 * g + 5 * g + (screen_width / 20) * 2), round((float(screen_height / 20)) * (1.2 * (f+4)) + (screen_height / 20) * 4),  (round(float((screen_width / 10) * 1.5))), round(float(screen_height / 20)))
+        rects.append(rect)
 
+numbers = [[7,4,1,0],[8,5,2,"."],[9,6,3,"*10**"],["DEL","*","+","ANS"],["AC","/","-","="]]
+text = ""
+text_result = ""
+ANS = ""
+result_given = 0
 running = True
 while running:
     cursor_pos = pygame.mouse.get_pos()
@@ -36,24 +43,124 @@ while running:
             if event.button == 1:
                 for i in range(len(rects)):
                     if rects[i].collidepoint(event.pos):
-                        if i == 0:
-                            text+="7"
-                        if i == 3:
-                            text+="8"
-                        if i == 6:
-                            text+="9"
-                        if i == 1:
-                            text+="4"
-                        if i == 4:
-                            text+="5"
-                        if i == 7:
-                            text+="6"
-                        if i == 2:
-                            text+="1"
-                        if i == 5:
-                            text+="2"
-                        if i == 8:
-                            text+="3"
+                        if i == 18:
+                            if result_given == 1:
+                                text = "7"
+                                result_given = 0
+                            else:
+                                text += "7"
+                        if i == 22:
+                            if result_given == 1:
+                                text = "8"
+                                result_given = 0
+                            else:
+                                text += "8"
+                        if i == 26:
+                            if result_given == 1:
+                                text = "9"
+                                result_given = 0
+                            else:
+                                text += "9"
+                        if i == 19:
+                            if result_given == 1:
+                                text = "4"
+                                result_given = 0
+                            else:
+                                text += "4"
+                        if i == 23:
+                            if result_given == 1:
+                                text = "5"
+                                result_given = 0
+                            else:
+                                text += "5"
+                        if i == 27:
+                            if result_given == 1:
+                                text = "6"
+                                result_given = 0
+                            else:
+                                text += "6"
+                        if i == 20:
+                            if result_given == 1:
+                                text = "1"
+                                result_given = 0
+                            else:
+                                text += "1"
+                        if i == 24:
+                            if result_given == 1:
+                                text = "2"
+                                result_given = 0
+                            else:
+                                text += "2"
+                        if i == 28:
+                            if result_given == 1:
+                                text = "3"
+                                result_given = 0
+                            else:
+                                text += "3"
+                        if i == 21:
+                            if result_given == 1:
+                                text = "0"
+                                result_given = 0
+                            else:
+                                text += "0"
+                        if i == 25:
+                            if result_given == 1:
+                                text = "."
+                                result_given = 0
+                            else:
+                                text += "."
+                        if i == 29:
+                            if result_given == 1:
+                                text = "*10**"
+                                result_given = 0
+                            else:
+                                text += "*10**"
+                        if i == 30:
+                            text = text[:-1]
+                        if i == 31:
+                            if result_given == 1:
+                                text = str(ANS) + "*"
+                                result_given = 0
+                            else:
+                                text += "*"
+                        if i == 32:
+                            if result_given == 1:
+                                text = str(ANS) + "+"
+                                result_given = 0
+                            else:
+                                text += "+"
+                        if i == 33:
+                            if result_given == 1:
+                                text = "ANS"
+                                result_given = 0
+                            else:
+                                text += "ANS"
+                        if i == 34:
+                            text = ""
+                        if i == 35:
+                            if result_given == 1:
+                                text = str(ANS) + "/"
+                                result_given = 0
+                            else:
+                                text += "/"
+                        if i == 36:
+                            if result_given == 1:
+                                text = str(ANS) + "-"
+                                result_given = 0
+                            else:
+                                text += "-"
+                        if i == 37:
+                            if text != "":
+                                try:
+                                    waarde_ans = float(ANS) if ANS != "" else 0
+
+                                    resultaat = eval(text, {"ANS": waarde_ans})
+                                    text_result = str(resultaat)
+                                    ANS = resultaat
+                                    result_given = 1
+                                except:
+                                    text_result = "Error"
+                                    result_given = 1
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -71,9 +178,10 @@ while running:
     #scherm opnieuw zwart maken
     screen.fill((0, 0, 0))
 
-    pygame.draw.rect(screen, colours[6], (round(float(screen_width/10)), round(float(screen_height/20)),(round(float((screen_width/10)*8))) , round(float(screen_height/20))), 5, 10)
+    pygame.draw.rect(screen, colours[6], (round(float(screen_width/10)), round(float(screen_height/20)),(round(float((screen_width/10)*8))) , round(float(screen_height/20)*1.5)), 5, 10)
 
-    screen.blit(font_stats.render(f"{text}", True, colours[1]),(round(float((screen_width*1.1) / 10)), round(float((screen_height * 1.25) / 20))))
+    screen.blit(font_stats.render(f"{text}", True, colours[1]),(round(float((screen_width*1.1) / 10)), round(float((screen_height * 1.20) / 20))))
+    screen.blit(font_stats.render(f"{text_result}", True, colours[1]),(round(float((screen_width * 1.1) / 10)), round(float((screen_height * 1.8) / 20))))
 
     for i in range(len(circles)):
         pygame.draw.circle(screen, colours[6], circles[i], 15, 3)
@@ -94,11 +202,9 @@ while running:
         if middelpunt.distance_to(muis) <= 15:
             pygame.draw.circle(screen, colours[1], circles[i], 15, 3)
 
-    for c in range(3):
-        for d in range(3):
-            screen.blit(font_stats.render(f"{numbers[d][c]}", True, colours[1]),(round(float(screen_width / 10) * 1.33 * c + (screen_width*3)/20), round((float(screen_height / 20)) * (1.2 * d) + (screen_height / 20) * 4.2)))
-
-
+    for c in range(5):
+        for d in range(4):
+            screen.blit(font_stats.render(f"{numbers[c][d]}", True, colours[1]),(round(float(screen_width / 10) * 1.5 * c + (screen_width*3)/20), round((float(screen_height / 20)) * (1.2 * (d+3)) + (screen_height / 20) * 5.4)))
 
 
 
