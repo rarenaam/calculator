@@ -1,4 +1,6 @@
 import pygame
+import math
+import re
 
 resolution = [[640, 480],[1280, 720],[1920, 1080],[2560, 1440],[3840, 2160]]
 
@@ -26,8 +28,8 @@ for g in range(5):
     for f in range(4):
         rect = pygame.Rect(round(float(screen_width / 10) * 1.5 * g + 5 * g + (screen_width / 20) * 2), round((float(screen_height / 20)) * (1.2 * (f+4)) + (screen_height / 20) * 4),  (round(float((screen_width / 10) * 1.5))), round(float(screen_height / 20)))
         rects.append(rect)
-
-numbers = [[7,4,1,0],[8,5,2,"."],[9,6,3,"*10**"],["DEL","*","+","ANS"],["AC","/","-","="]]
+numbers_1 = [["a b/c","(-)","RCL"],["**0.5"," ````","ENG"],[" **2","  hyp","     ("],["**","   sin","     )"],["   log","   cos","  ,"],["   ln","   tan"," M+"]]
+numbers_2 = [[7,4,1,0],[8,5,2,"."],[9,6,3,"*10**"],["DEL","*","+","ANS"],["AC","/","-","="]]
 text = ""
 text_result = ""
 ANS = ""
@@ -43,6 +45,48 @@ while running:
             if event.button == 1:
                 for i in range(len(rects)):
                     if rects[i].collidepoint(event.pos):
+                        if i == 1:
+                            if result_given == 1:
+                                text = "-" + str(ANS)
+                                result_given = 0
+                            else:
+                                text = "-"
+                        if i == 3:
+                            if result_given == 1:
+                                text = "**0.5"
+                                result_given = 0
+                            else:
+                                text += "**0.5"
+                        if i == 6:
+                            if result_given == 1:
+                                text = str(ANS) + "**2"
+                                result_given = 0
+                            else:
+                                text += "**2"
+                        if i == 8:
+                            if result_given == 1:
+                                text = "("
+                                result_given = 0
+                            else:
+                                text += "("
+                        if i == 9:
+                            if result_given == 1:
+                                text = str(ANS) + "**"
+                                result_given = 0
+                            else:
+                                text += "**"
+                        if i == 10:
+                            if result_given == 1:
+                                text = "sin"
+                                result_given = 0
+                            else:
+                                text += "sin"
+                        if i == 11:
+                            if result_given == 1:
+                                text = ")"
+                                result_given = 0
+                            else:
+                                text += ")"
                         if i == 18:
                             if result_given == 1:
                                 text = "7"
@@ -137,6 +181,7 @@ while running:
                                 text += "ANS"
                         if i == 34:
                             text = ""
+                            text_given = ""
                         if i == 35:
                             if result_given == 1:
                                 text = str(ANS) + "/"
@@ -152,11 +197,14 @@ while running:
                         if i == 37:
                             if text != "":
                                 try:
-                                    waarde_ans = float(ANS) if ANS != "" else 0
-
-                                    resultaat = eval(text, {"ANS": waarde_ans})
-                                    text_result = str(resultaat)
-                                    ANS = resultaat
+                                    waarde_ans = ANS
+                                    text_niet = re.sub(r"sin\(.*?\)", "0", text)
+                                    text_niet = text.replace("sin", "math.sin")
+                                    text_niet = text.replace("tan", "math.tan")
+                                    text_niet = text.replace("cos", "math.cos")
+                                    print(text_niet)
+                                    text_result = eval(text_niet)
+                                    ANS = text_result
                                     result_given = 1
                                 except:
                                     text_result = "Error"
@@ -202,9 +250,14 @@ while running:
         if middelpunt.distance_to(muis) <= 15:
             pygame.draw.circle(screen, colours[1], circles[i], 15, 3)
 
+    for h in range(6):
+        for r in range(3):
+            screen.blit(font_stats.render(f"{numbers_1[h][r]}", True, colours[1]),(round(float(screen_width / 10) * 1.3 * h + (screen_width*2.5)/20), round((float(screen_height / 20)) * (1.2 * r) + (screen_height / 20) * 4.3)))
+
+
     for c in range(5):
         for d in range(4):
-            screen.blit(font_stats.render(f"{numbers[c][d]}", True, colours[1]),(round(float(screen_width / 10) * 1.5 * c + (screen_width*3)/20), round((float(screen_height / 20)) * (1.2 * (d+3)) + (screen_height / 20) * 5.4)))
+            screen.blit(font_stats.render(f"{numbers_2[c][d]}", True, colours[1]),(round(float(screen_width / 10) * 1.5 * c + (screen_width*3)/20), round((float(screen_height / 20)) * (1.2 * (d+3)) + (screen_height / 20) * 5.4)))
 
 
 
